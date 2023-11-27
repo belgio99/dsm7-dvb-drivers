@@ -12,7 +12,7 @@ Some specs:
 - The USB-DVB device I'm using is a [**Hauppauge WinTV-dualHD**](https://www.hauppauge.com/pages/products/data_dualhd.html), currently available on Amazon for about €70.
   - This device is reported to be supported inside the Linux Kernel from 4.17, but the Synology Kernel is 4.4.302+. So, we'll have to compile the kernel modules ourselves.
 
-This guide will use the `media_build` repo from [**Linuxtv**](https://git.linuxtv.org/media_build.git) to compile the kernel modules. This repo backports patches to use more recent devices in legacy kernels. This repo is EOL, but it's still working for my device, and there are no other alternatives to my knowledge
+This guide will use the `media_build` repo from [**Linuxtv**](https://git.linuxtv.org/media_build.git) to compile the kernel modules. This repo backports patches to use more recent devices in legacy kernels. This repo is EOL, but it should work for a myriad of devices, and there are no other alternatives to my knowledge.
 
 
 ## Acknowledgements
@@ -153,7 +153,7 @@ You'll find the compiled kernel modules in the `build/media_build/v4l` folder. Y
 Move the compiled kernel modules to the /export folder, and then to your NAS. 
 Create a folder with the result from `uname -r` in the `/lib/modules` folder of your NAS. In my case, it was `/lib/modules/4.4.302+`.
 
-To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can use the linux command `insmod`. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot. You can find my modified script in this repo, in the `scripts` folder.
+To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot.
 
 1. mc.ko
 2. rc-core.ko
@@ -215,3 +215,5 @@ To me, this "unsupported" device is now working flawlessly. I'm using it with Pl
 In this repo's releases, I'm leaving the compiled kernel modules for my architecture and CPU family, in case someone needs them. I'm also leaving the modified files I used to compile them.
 
 From time to time, Synology may update the kernel, so you may have to wait for the sources to become available to update your system, if the kernel version should change. The good thing is that 4.4.302+ is the last 4.4 kernel, and it's EOL, so it should not change anymore. Synology also doesn't update major kernel versions, so you should be safe for a while.
+
+Don't forget to star this repo if you found it useful!
