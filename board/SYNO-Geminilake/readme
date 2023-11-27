@@ -1,0 +1,14 @@
+This board profile covers all Synology devices using the Apollolake architecture.
+
+This includes:
+- DS1019+
+- DS918+
+- DS718+
+- DS418play
+- DS218+
+
+
+Kernel modifications:
+- none
+
+

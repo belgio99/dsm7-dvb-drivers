@@ -1,0 +1,25 @@
+From d467641d11f7e73345426b80ff877cab25caf390 Mon Sep 17 00:00:00 2001
+From: Brad Love <brad@nextdimension.cc>
+Date: Mon, 20 May 2019 19:04:39 -0500
+Subject: [PATCH] Add required kernel signature for modules
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 59b700c..2badd56 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ VERSION = 4
+ PATCHLEVEL = 4
+ SUBLEVEL = 302
+-EXTRAVERSION =
++EXTRAVERSION = +
+ NAME = Blurry Fish Butt
+ 
+ # *DOCUMENTATION*
+-- 
+2.7.4
+
