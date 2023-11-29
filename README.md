@@ -1,6 +1,6 @@
 # Synology DSM 7 - Compiling DVB Linux Kernel Modules
 
-I'm writing this since it could be helpful to everyone trying to make DVB kernel modules for common USB DVB work on DSM 7 and above.
+I'm writing this since it could be helpful to everyone trying to make common USB DVB work on Synology DSM 7 and above.
 
 Some specs:
 
@@ -111,7 +111,7 @@ to initialize the tool. This will create a `SYNO-Geminilake` folder in the `buil
 ## Compile the headers for the downloaded kernel
 I ran:
 ```bash
-./md_builder.sh -B media -d SYNO-Apollolake
+./md_builder.sh -B media -d SYNO-Geminilake
 ```
 to compile the Synology kernel. This took a bit. If you want to speed up the process, edit the `config` file to leverage make multi-threading.
 
@@ -154,6 +154,8 @@ Move the compiled kernel modules to the /export folder, and then to your NAS.
 Create a folder with the result from `uname -r` in the `/lib/modules` folder of your NAS. In my case, it was `/lib/modules/4.4.302+`.
 
 To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot.
+
+These are the modules I insert in the kernel for the dualHD (order is relevant):
 
 1. mc.ko
 2. rc-core.ko
@@ -212,8 +214,8 @@ For my device, I needed the following firmware files:
 # Step 8: Enjoy!
 To me, this "unsupported" device is now working flawlessly. I'm using it with Plex and it's working great. I also used it with TVHeadend and it worked great too.
 
-In this repo's releases, I'm leaving the compiled kernel modules for my architecture and CPU family, in case someone needs them. I'm also leaving the modified files I used to compile them.
+In this repo's releases, I'm leaving the compiled kernel modules for my architecture and CPU family, in case someone needs them. I'm also leaving the modified files I used to compile them. Feel free to submit a pull request to add other configs and boards, if you successfully compiled the kmods!
 
-From time to time, Synology may update the kernel, so you may have to wait for the sources to become available to update your system, if the kernel version should change. The good thing is that 4.4.302+ is the last 4.4 kernel, and it's EOL, so it should not change anymore. Synology also doesn't update major kernel versions, so you should be safe for a while.
+From time to time, Synology may update the kernel, so you may have to wait for the sources to become available to update your system, should the kernel version may change. The good thing is that 4.4.302+ is the last 4.4 kernel, and it's EOL, so it should not change anymore. Synology also doesn't update major kernel versions, so you should be safe for a while.
 
 Don't forget to star this repo if you found it useful!
