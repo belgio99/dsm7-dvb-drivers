@@ -1,5 +1,4 @@
 # Synology DSM 7 - Compiling DVB Linux Kernel Modules
-
 I'm writing this since it could be helpful to everyone trying to make common USB DVB work on Synology DSM 7 and above.
 
 Some specs:
@@ -16,7 +15,7 @@ This guide will use the `media_build` repo from [**Linuxtv**](https://git.linuxt
 
 
 ## Acknowledgements
-First of all, I want to thank [**@th0ma7**](https://github.com/th0ma7) for the work on [**his Synology repo**](https://github.com/th0ma7/synology). His guide on how to compile kernel modules for Synology NAS (DSM 6) was very helpful for me, and I wanted to port it to DSM 7 since I could not find any guide for it.
+First of all, I want to thank [**@th0ma7**](https://github.com/th0ma7) for the work on [**his Synology repo**](https://github.com/th0ma7/synology). His guide on how to compile kernel modules for Synology NAS (DSM 6) was very helpful to me, and I wanted to port it to DSM 7 since I could not find any guide for it.
 
 Then, I want to thank [**@b-rad-NDi**](https://github.com/b-rad-NDi) for the work on the [**Embedded-MediaDrivers**](https://github.com/b-rad-NDi/Embedded-MediaDrivers) repo.
 
@@ -70,7 +69,7 @@ So you'll have to browse the folders and download the appropriate version for yo
 ```bash
 /compile/Embedded-MediaDrivers/dl/SYNO-Geminilake
 ```
-- You can also use wget to download them directly from the container in the right folder.
+- You can also use the wget in the container to download the files directly in the right folder.
 
 ## GPL Sources
 Browse again the [archive.synology.com/download/ToolChain](https://archive.synology.com/download/ToolChain) folder and download the Synology NAS GPL sources for your architecture. Download the `linux-<kernelversion>.tgz` (in my case `linux-4.4.x.txz`) and transfer it to your container, in:
@@ -85,15 +84,14 @@ Browse again the [archive.synology.com/download/ToolChain](https://archive.synol
 Enter the folder, and in the `config` subfolder, you'll have to create a file containing the config for your architecture. To create mine, I used the b-rad-NDi one as a base (SYNO-Apollolake.conf) and modified for my Gemini Lake architecture (SYNO-Geminilake.conf). In particular, I did: 
 
 - find and replace everything from Apollo to Gemini (make sure to replace always with the correct case).
-- Adjust the TOOLCHAIN_LOCATION var at the top of the file to match the Toolchain file name you've donwloaded before.
-- In my case, there KERNEL_LOCATION var was already correct, but you should check it too.
+- Adjust the TOOLCHAIN_LOCATION var at the top of the file to match the Toolchain file name you've downloaded before.
+- In my case, the KERNEL_LOCATION var was already correct, but you should check it too.
 - Adjust the dead Linuxtv media_build repo link (copy mine)
 
 You can find my modified file in this repo, in the `config` folder.
 
 
 ## Creating the board folder
-
 Enter the Embedded-MediaDrivers folder and create a new subfolder in the `board` subfolder (mine is SYNO-Geminilake). This folder contains the board-specific patches for the kernel modules. 
 
 b-rad-NDi already created one for Apollo Lake, so I just copied it and modified it for Gemini Lake. In his repo there are also other boards, so you can use them as a base for your architecture. On x86_64, it should be pretty straightforward to modify the Apollo Lake one for your architecture. For other architectures, you'll have to do some research.
@@ -113,7 +111,7 @@ I ran:
 ```bash
 ./md_builder.sh -B media -d SYNO-Geminilake
 ```
-to compile the Synology kernel. This took a bit. If you want to speed up the process, edit the `config` file to leverage make multi-threading.
+to compile the Synology kernel. This took a bit. If you want to speed up the process, you can edit the `config` file to leverage make multi-threading, but if you're not familiar with it, I suggest you don't and just wait.
 
 ## Manipulating the media_build repo
 in the `build` folder, you'll have now a new folder called `media_build` containing the Linuxtv repo. Go to this folder. Since this repo is EOL and files were deleted, I checked out the last working commit:
@@ -145,7 +143,7 @@ Now, everything is ready to run the actual compilation:
 ./md_builder.sh -B media -d SYNO-Geminilake
 ```
 
-This will take a while. You can speed up the process by editing the makefiles to leverage make multi-threading, but if you're not familiar with it, I suggest you don't and just wait.
+This will take a while. Just like before, you can speed up the process by editing the makefiles to leverage make multi-threading.
 
 You'll find the compiled kernel modules in the `build/media_build/v4l` folder. You'll need only the `.ko` files. 
 
@@ -155,7 +153,7 @@ Create a folder with the result from `uname -r` in the `/lib/modules` folder of 
 
 To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot.
 
-These are the modules I insert in the kernel for the dualHD (order is relevant):
+These are the modules I loaded in the kernel for the dualHD (order is relevant):
 
 1. mc.ko
 2. rc-core.ko
@@ -208,7 +206,6 @@ and put it in the `/lib/firmware` folder of my NAS.
 For my device, I needed the following firmware files:
 - dvb-demod-si2168-d60-01.fw
 - dvb-tuner-si2157-a30-01.fw (I had to rename it to dvb_driver_si2157_rom50.fw to make it work)
-
 
 
 # Step 8: Enjoy!
