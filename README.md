@@ -149,7 +149,7 @@ You'll find the compiled kernel modules in the `build/media_build/v4l` folder. Y
 
 # Step 6: Installing the kernel modules
 Move the compiled kernel modules to the /export folder, and then to your NAS. 
-Create a folder with the result from `uname -r` in the `/lib/modules` folder of your NAS. In my case, it was `/lib/modules/4.4.302+`.
+Create a folder with the result from `uname -r` in the `/usr/local/lib/modules` folder of your NAS. In my case, it was `/usr/local/lib/modules/4.4.302+`.
 
 To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot.
 
