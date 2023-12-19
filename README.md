@@ -31,6 +31,7 @@ I'm just sharing what worked for me and my Gemini Lake architecture.
 ## Prerequisites
 - A Synology NAS with DSM 7 installed
 - A USB DVB device supported by the Linux Kernel (check [**this list**](https://www.linuxtv.org/wiki/index.php/DVB-T_USB_Devices) for reference)
+- The USB Serial drivers already installed and loaded (follow [**this guide**](https://mariushosting.com/synology-how-to-add-usb-support-on-dsm-7/) if you need help)
 
 # Step 1: Prepare the build environment
 First of all, we need to prepare the build environment. 
@@ -151,7 +152,7 @@ You'll find the compiled kernel modules in the `build/media_build/v4l` folder. Y
 Move the compiled kernel modules to the /export folder, and then to your NAS. 
 Create a folder with the result from `uname -r` in the `/usr/local/lib/modules` folder of your NAS. In my case, it was `/usr/local/lib/modules/4.4.302+`.
 
-To load them, I used the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I modified the script to load the modules I needed, and set up a scheduled task to load them at boot.
+To load them, I used my `insert_modules.sh` script, which is a simplified version of the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I set up a scheduled task to automatically load them at boot.
 
 These are the modules I loaded in the kernel for the dualHD (order is relevant):
 
