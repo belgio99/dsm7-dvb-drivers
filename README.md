@@ -114,10 +114,20 @@ I ran:
 ```
 to compile the Synology kernel. This took a bit. If you want to speed up the process, you can edit the `config` file to leverage make multi-threading, but if you're not familiar with it, I suggest you don't and just wait.
 
-## Manipulating the media_build repo
-in the `build` folder, you'll have now a new folder called `media_build` containing the Linuxtv repo. Go to this folder. Since this repo is EOL and files were deleted, I checked out the last working commit:
+This command will surely fail with this error. We'll deal with it in the next section.
+
 ```bash
-git checkout 0fe857b86addf382f6fd383948bd7736a3201403
+make: *** No rule to make target 'release'.  Stop.
+make: *** linux/: No such file or directory.  Stop.
+make: *** linux/: No such file or directory.  Stop.
+make: *** v4l/: Not a directory.  Stop.
+```
+
+## Manipulating the media_build repo
+Even though the previous command failed, in the `build` folder you'll now have a new folder called `media_build` containing the Linuxtv repo. Go to this folder. Since this repo is EOL and files were deleted, I checked out the last working commit:
+
+```bash
+git checkout -f 0fe857b86addf382f6fd383948bd7736a3201403
 ```
 
 Then, I opened the file `build` and commented out the lines that made the tool check for the latest version (the one that deletes the files). In particular, lines 504-505:
@@ -134,7 +144,7 @@ Then, I opened the file `build` and commented out the lines that made the tool c
 ```
 
 ### Extra (Only for Gemini Lake?)
-I had to remove a specific patch in the `media_build/backports` folder, since it was causing the compilation to fail. The patch is `v4.11_vb2_kmap.patch`. 
+I also had to remove a specific patch in the `media_build/backports` folder, since it was causing the compilation to fail. The patch is `v4.11_vb2_kmap.patch`. 
 
 This patch is just wrong for lots of kernels and has been reverted since (but not in this repo). Don't delete the file, just empty it.
 
@@ -149,7 +159,7 @@ This will take a while. Just like before, you can speed up the process by editin
 You'll find the compiled kernel modules in the `build/media_build/v4l` folder. You'll need only the `.ko` files. 
 
 # Step 6: Installing the kernel modules
-Move the compiled kernel modules to the /export folder, and then to your NAS. 
+Move the compiled kernel modules to the /export folder, and then to your NAS. For now, I suggest to move all of them, especially if you are unsure of what modules you need.
 Create a folder with the result from `uname -r` in the `/usr/local/lib/modules` folder of your NAS. In my case, it was `/usr/local/lib/modules/4.4.302+`.
 
 To load them, I used my `insert_modules.sh` script, which is a simplified version of the `hauppauge.sh` script from th0ma7's repo, but you can manually load them using the `insmod` linux command. I set up a scheduled task to automatically load them at boot.
@@ -185,6 +195,8 @@ You'll see that something is wrong (missing modules, wrong module insert order) 
 [160210.992588] dvb_usb: Unknown symbol dvb_create_media_graph (err 0)
 [160210.999789] dvb_usb: Unknown symbol dvb_unregister_adapter (err 0)
 ```
+
+When you don't have any more errors like these, take note of the modules you need, and delete all the others. I highly suggest you do this because the system partition on the NAS is not that large, and I had auto system upgrades failing (with "no space left on device") by leaving all the modules in there.
 
 # Step 7: Device firmware loading
 In my case, I also needed to load the firmware for my device. In fact, `dmesg` was reporting the following error:
